@@ -35,7 +35,7 @@ David Skarsten
 
 ## Version History
 
-* 0.1
+* 0.4
     * Initial Release
 
 ## License
