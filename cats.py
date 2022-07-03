@@ -271,9 +271,13 @@ def create_new_category(cat, groups):
 
 
 def read_csv(file=None, fieldnames=None):
-    with open(file, newline='') as csvfile:
-        rowreader = list(csv.DictReader(csvfile, delimiter=',', quotechar='"', fieldnames=fieldnames))
+    try:
+        with open(file, newline='') as csvfile:
+            rowreader = list(csv.DictReader(csvfile, delimiter=',', quotechar='"', fieldnames=fieldnames))
         return list(rowreader)
+    except FileNotFoundError as err:
+        print(f"Cannot open file {file}")
+        exit()
 
 
 def the_maury_povich_show(data, groups):
@@ -628,10 +632,21 @@ def main():
     build_tcg_table(session)
     import_csv(session)
 
-    # TODO: Child should inherit type and group from parent
-    add_new_category(session, name='new cat', parent_name=None, type='Type B', group_name='Group C')
-    add_new_category(session, name='new cat 2', parent_name='Cat 2', type='Type A', group_name='Group B')
-    #add_new_category(session, name='new cat 3', parent_name="Cat doesn't exist", type='Type A', group_name='Group D')
+    try:
+        # TODO: Child should inherit type and group from parent
+        add_new_category(session, name='new cat', parent_name=None, type='Type B', group_name='Group C')
+    except sqlalchemy.exc.NoResultFound as err:
+        print("Cannot create category: '/new cat'")
+
+    try:
+        add_new_category(session, name='new cat 2', parent_name='Cat 2', type='Type A', group_name='Group B')
+    except sqlalchemy.exc.NoResultFound as err:
+        print("Cannot create category: '/Cat 2/new cat 2'")
+
+    try:
+        add_new_category(session, name='new cat 3', parent_name="Cat doesn't exist", type='Type A', group_name='Group D')
+    except sqlalchemy.exc.NoResultFound as err:
+        print("Cannot create category: '/Cat doesn\'t exist/new cat 3'")
 
     delete_category(session, id=3)
     modify_category(session, id=2, name='Modified category', type='Type B')
