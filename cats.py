@@ -7,7 +7,6 @@ from sqlalchemy import Boolean
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref
-#from sqlalchemy.orm import joinedload_all
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.orm import Session
@@ -288,8 +287,6 @@ def the_maury_povich_show(data, groups):
     level = indent = 0
     parent = None
     root = children = list()
-    #root = Category(name='root', parent=None, group_id=0, type='')
-    #children = root.children
 
     for r in data:
         name = r['name']
@@ -481,7 +478,9 @@ def delete_category(session, **kwargs):
 
 # TODO: Finish display
 def view_category_table(categories):
-    i=1
+
+    i = 1
+
     for row in categories:
         id = row.id or ''
         parent_id = row.parent_id or ''
@@ -493,9 +492,10 @@ def view_category_table(categories):
         tag = row.tag or ''
         indent = path.count('/')
         name = (' ' * indent*4) + name
-        #print("{:>"+str(i)+"}").format('hello')
+
         print(f"{i:>3} {id:4} {parent_id:3} {name:45}{path:45}{group:27}{has_tag:<5}{tag:5}")
-        i+=1
+
+        i += 1
 
 
 def view_category_search(tree=None, pattern=None):
