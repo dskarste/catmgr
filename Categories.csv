@@ -1,0 +1,9 @@
+Category,Type,Description,Group,Tag,Hide
+Cat 1,Type A,Category 1,Group A,Form A T,H
+   Cat 1.1,Type A,Category 1.1,Group A,Form A T,H
+      Cat 1.1.1,Type A,Category 1.1.1,Group A,Form A T,H
+      Cat 1.1.2,Type A,Category 1.1.2,Group A,Form A T,H
+   Cat 1.2,Type A,Category 1.2,Group A,,H
+Cat 2,Type A,Category 2,Group B,Form C T,H
+Cat 3,Type A,Category 3,Group A,Form F T,
+Cat 4,Type B,Category 4,Group C,,
