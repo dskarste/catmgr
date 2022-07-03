@@ -18,6 +18,8 @@ from sqlalchemy import types
 from sqlalchemy.orm import validates
 import sqlalchemy.exc
 
+import sys
+import os
 import csv
 import re
 
@@ -313,10 +315,9 @@ def the_maury_povich_show(data, groups):
     return root
 
 
-def import_csv(session):
+def import_csv(session, file):
     has_header=True
     fieldnames = ['name','type','description','category_group','tag','hidden']
-    file = r'Categories.csv'
 
     groups = dict()
     for g in session.query(CategoryGroup):
@@ -621,7 +622,7 @@ def setup_tree_model(data):
 # delete
 # list all
 # search
-def main():
+def main(file):
     #engine = create_engine("sqlite:///categories.db", echo=True)
     tables = [Base.metadata.tables['category'],
               Base.metadata.tables['category_group']]
@@ -630,7 +631,7 @@ def main():
     session = Session(engine)
 
     build_tcg_table(session)
-    import_csv(session)
+    import_csv(session, file)
 
     try:
         # TODO: Child should inherit type and group from parent
@@ -672,4 +673,20 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+
+    if len(sys.argv) < 2:
+        print(f"Usage: {sys.argv[0]} <file>")
+        exit()
+    file = sys.argv[1]
+
+    if os.path.isdir(file):
+        print(f"File {file} is a directory")
+        exit()
+    if not os.path.isfile(file):
+        print(f"File {file} does not exist")
+        exit()
+    if not os.access(file, os.R_OK):
+        print(f"Cannot read {file}")
+        exit()
+
+    main(file)
