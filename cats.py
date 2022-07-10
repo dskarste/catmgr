@@ -229,17 +229,9 @@ class TreeModel:
             return n if n.children else None
 
 
-def build_tcg_table(session):
+def build_tcg_table(session, names):
     i=1
-    for name in ([
-        'Group A',
-        'Group B',
-        'Group C',
-        'Group D',
-        'Group E',
-        'Group F',
-        'Group G',
-    ]):
+    for name in names:
         session.add(CategoryGroup(name=name, seq=i))
         i+=1
     session.commit()
@@ -630,7 +622,9 @@ def main(file):
     Base.metadata.create_all(engine, tables=tables)
     session = Session(engine)
 
-    build_tcg_table(session)
+    # Example group names
+    grp_names = [ 'Group A', 'Group B', 'Group C', 'Group D', 'Group E', 'Group F', 'Group G' ]
+    build_tcg_table(session, grp_names)
     import_csv(session, file)
 
     try:
